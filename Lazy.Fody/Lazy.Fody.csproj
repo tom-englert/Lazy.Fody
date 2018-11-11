@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\FodyTools\FodyTools\AbstractModuleWeaver.cs" Link="AbstractModuleWeaver.cs" />
+    <Compile Include="..\FodyTools\FodyTools\AttributeExtensionMethods.cs" Link="AttributeExtensionMethods.cs" />
+    <Compile Include="..\FodyTools\FodyTools\CollectionExtensionMethods.cs" Link="CollectionExtensionMethods.cs" />
+    <Compile Include="..\FodyTools\FodyTools\InstructionSequence.cs" Link="InstructionSequence.cs" />
+    <Compile Include="..\FodyTools\FodyTools\InstructionSequences.cs" Link="InstructionSequences.cs" />
+    <Compile Include="..\FodyTools\FodyTools\MemberExtensionMethods.cs" Link="MemberExtensionMethods.cs" />
+    <Compile Include="..\FodyTools\FodyTools\TypeExtensionMethods.cs" Link="TypeExtensionMethods.cs" />
+    <Compile Include="..\FodyTools\FodyTools\TypeSystemExtensionMethods.cs" Link="TypeSystemExtensionMethods.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FodyHelpers" Version="3.2.17" />
   </ItemGroup>
 

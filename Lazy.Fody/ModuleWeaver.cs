@@ -1,17 +1,29 @@
 ﻿namespace Lazy.Fody
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 
-    using global::Fody;
+    using FodyTools;
 
-    public class ModuleWeaver : BaseModuleWeaver
+    using JetBrains.Annotations;
+
+    public class ModuleWeaver : AbstractModuleWeaver
     {
         public override void Execute()
         {
-            var x = ModuleDefinition.GetTypes();
+            // Debugger.Launch();
+
+            ModuleDefinition.Process(this, new SystemReferences(this));
         }
 
-        public override IEnumerable<string> GetAssembliesForScanning() => Enumerable.Empty<string>();
+        [ItemNotNull]
+        [NotNull]
+        public override IEnumerable<string> GetAssembliesForScanning()
+        {
+            yield return "System.Threading";
+        }
+
+        public override bool ShouldCleanReference => true;
     }
 }
