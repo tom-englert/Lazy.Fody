@@ -15,7 +15,7 @@ namespace Lazy.Fody
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
-    public class SystemReferences
+    internal class SystemReferences
     {
         public global::Fody.TypeSystem TypeSystem { get; }
 
