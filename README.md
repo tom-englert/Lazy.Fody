@@ -44,4 +44,4 @@ class Sample
 ---
 ### Icon
 
-Sloth by Chanut is Industries from the Noun Project
+[Sloth](https://thenounproject.com/chanut-is/collection/zoo-welcome-to-zootopia/?i=1871708) by [Chanut is Industries](https://thenounproject.com/chanut-is/) from the Noun Project

@@ -40,4 +40,8 @@
     <TfmSpecificPackageFile Include="build\*.targets" PackagePath="build" />
   </ItemGroup>
 
+  <Target Name="LogTargetFramework" BeforeTargets="CoreCompile">
+    <Message Text="TargetFramework: $(TargetFramework): ID=$(TargetFrameworkIdentifier), Version=$(TargetFrameworkVersion), Profile=$(TargetFrameworkProfile)" />
+  </Target>
+
 </Project>
