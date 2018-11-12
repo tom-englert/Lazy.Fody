@@ -1,3 +1,5 @@
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+
 namespace Tests
 {
     using System;

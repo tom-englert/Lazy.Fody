@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net46;netcoreapp2.1;net40-client;net40;netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <IsUnitTestSupportedByFramework Condition="'$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'netcoreapp2.1'">true</IsUnitTestSupportedByFramework>
   </PropertyGroup>
+
+  <ItemGroup Condition="$(IsUnitTestSupportedByFramework) != true">
+    <Compile Include="..\FodyTools\FodyTools\XunitStubs.cs" Link="XunitStubs.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Fody" Version="3.2.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="$(IsUnitTestSupportedByFramework) == true">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
@@ -19,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lazy.Fody\Lazy.Fody.csproj" />
     <ProjectReference Include="..\Lazy\Lazy.csproj" />
   </ItemGroup>
 
