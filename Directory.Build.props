@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Copyright>Copyright © tom-englert.de 2018. Distributed under the MIT License.</Copyright>
     <Product>Lazy.Fody</Product>
-    <Version>1.1</Version>
+    <Version>1.2</Version>
     <Description>Automates the plumbing around System.Lazy.</Description>
   </PropertyGroup>
 
