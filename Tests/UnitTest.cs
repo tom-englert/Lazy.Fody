@@ -15,6 +15,11 @@ namespace Tests
 
         private System.Lazy<int> _lazy;
 
+        static UnitTest()
+        {
+
+        }
+
         public UnitTest()
         {
             _lazy = new System.Lazy<int>(GetValue);
