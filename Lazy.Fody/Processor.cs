@@ -103,8 +103,12 @@
             if (originalMethod == null || !originalMethod.HasBody)
                 throw new WeavingException($"Unsupported property {property} => property has no getter");
 
+            /*
             if (originalMethod.IsStatic)
                 throw new WeavingException($"Unsupported property {property} => property is static");
+            */
+
+            var isStatic = originalMethod.IsStatic;
 
             var classDefinition = originalMethod.DeclaringType;
 
@@ -124,7 +128,9 @@
             // replace the property getter with a new method: { return _Lazy_Fody_BackingField.Value }
 
             // -- create field of type: System.Lazy<property type>
-            var lazyField = new FieldDefinition(lazyFieldName, FieldAttributes.Private, genericLazyTypeInstance);
+			var fieldAttribs = FieldAttributes.Private;
+            if (isStatic) { fieldAttribs |= FieldAttributes.Static; }
+            var lazyField = new FieldDefinition(lazyFieldName, fieldAttribs, genericLazyTypeInstance);
             classDefinition.Fields.Add(lazyField);
 
             // -- create 
@@ -133,11 +139,21 @@
 
             var lazyValueGetter = systemReferences.LazyValueGetterReference.OnGenericType(genericLazyTypeInstance);
 
-            wrapperMethod.Body.Instructions.AddRange(
-                Instruction.Create(OpCodes.Ldarg_0),
-                Instruction.Create(OpCodes.Ldfld, lazyField),
-                Instruction.Create(OpCodes.Callvirt, lazyValueGetter),
-                Instruction.Create(OpCodes.Ret));
+            var wrapperMethodInstructions = 
+                isStatic
+                    ? new[] {                        
+                        Instruction.Create(OpCodes.Ldsfld, lazyField),
+                        Instruction.Create(OpCodes.Call, lazyValueGetter),
+                        Instruction.Create(OpCodes.Ret)
+                    }
+                    : new [] {
+                        Instruction.Create(OpCodes.Ldarg_0),
+                        Instruction.Create(OpCodes.Ldfld, lazyField),
+                        Instruction.Create(OpCodes.Callvirt, lazyValueGetter),
+                        Instruction.Create(OpCodes.Ret)
+                    };
+
+            wrapperMethod.Body.Instructions.AddRange(wrapperMethodInstructions);
 
             // -- rename old method
             originalMethod.IsSpecialName = false;
@@ -151,17 +167,26 @@
             var funcConstructor = systemReferences.FuncConstructorReference.OnGenericType(genericFuncTypeInstance);
             var lazyConstructor = systemReferences.LazyConstructorReference.OnGenericType(genericLazyTypeInstance);
 
-            classDefinition.InsertIntoConstructors(() => new[]
-            {
-                Instruction.Create(OpCodes.Ldarg_0),
-                Instruction.Create(OpCodes.Ldarg_0),
-                Instruction.Create(OpCodes.Ldftn, originalMethod),
-                Instruction.Create(OpCodes.Newobj, funcConstructor),
-                Instruction.Create(OpCodes.Ldc_I4, (int) threadingMode),
-                Instruction.Create(OpCodes.Newobj, lazyConstructor),
-                Instruction.Create(OpCodes.Stfld, lazyField)
-
-            });
+            if (isStatic) {
+                classDefinition.InsertIntoStaticConstructor(new[] {                                        
+                    Instruction.Create(OpCodes.Ldnull),
+                    Instruction.Create(OpCodes.Ldftn, originalMethod),
+                    Instruction.Create(OpCodes.Newobj, funcConstructor),
+                    Instruction.Create(OpCodes.Ldc_I4, (int) threadingMode),
+                    Instruction.Create(OpCodes.Newobj, lazyConstructor),
+                    Instruction.Create(OpCodes.Stsfld, lazyField),
+                });
+            } else {
+                classDefinition.InsertIntoConstructors(() => new[] {
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    Instruction.Create(OpCodes.Ldarg_0),
+                    Instruction.Create(OpCodes.Ldftn, originalMethod),
+                    Instruction.Create(OpCodes.Newobj, funcConstructor),
+                    Instruction.Create(OpCodes.Ldc_I4, (int) threadingMode),
+                    Instruction.Create(OpCodes.Newobj, lazyConstructor),
+                    Instruction.Create(OpCodes.Stfld, lazyField)
+                });
+            }
 
             weavedMethods[originalMethod] = wrapperMethod;
         }
