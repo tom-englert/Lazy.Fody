@@ -1,10 +1,8 @@
-using System;
-
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
 
 namespace Tests
 {
-    using System.Threading;
+    using System;
     using Lazy;
     using Xunit;
 
@@ -17,8 +15,7 @@ namespace Tests
         }
 
         [Fact] public void IsLazyApplied_Sys() {
-            var initVal = Test_SysLazy;
-            Thread.Sleep(10);
+            var initVal = Test_SysLazy;            
             Assert.NotEqual(initVal, GetValue());
             Assert.Equal(initVal, Test_SysLazy);
             Assert.NotEqual(initVal, GetValue());
@@ -31,7 +28,6 @@ namespace Tests
 
         [Fact] public void IsLazyApplied_Fody() {
             var initVal = Test_FodyLazy;
-            Thread.Sleep(20);
             Assert.NotEqual(initVal, GetValue());
             Assert.Equal(initVal, Test_FodyLazy);
             Assert.NotEqual(initVal, GetValue());
