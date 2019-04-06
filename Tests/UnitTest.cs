@@ -1,3 +1,6 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable NotNullMemberIsNotInitialized
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
 
 namespace Tests
@@ -13,16 +16,11 @@ namespace Tests
     {
         private int _getValueCalls;
 
-        private System.Lazy<int> _lazy;
-
-        static UnitTest()
-        {
-
-        }
+        private Lazy<int> _lazy;
 
         public UnitTest()
         {
-            _lazy = new System.Lazy<int>(GetValue);
+            _lazy = new Lazy<int>(GetValue);
         }
 
         [Fact]
@@ -66,11 +64,11 @@ namespace Tests
     {
         private int _getValueCalls;
 
-        private System.Lazy<int> _lazy;
+        private Lazy<int> _lazy;
 
         public Sample()
         {
-            _lazy = new System.Lazy<int>(GetValue);
+            _lazy = new Lazy<int>(GetValue);
         }
 
         public Sample(int someParam)
@@ -94,7 +92,7 @@ namespace Tests
     {
         private int _getValueCalls;
 
-        private readonly System.Lazy<int> _lazy;
+        private readonly Lazy<int> _lazy;
 
         public Sample2()
             : base(3)
@@ -104,7 +102,7 @@ namespace Tests
         public Sample2(int something)
             : base(something)
         {
-            _lazy = new System.Lazy<int>(() => something);
+            _lazy = new Lazy<int>(() => something);
         }
 
         public Sample2(double x)

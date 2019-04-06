@@ -1,8 +1,6 @@
 ﻿namespace Lazy.Fody
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
 
     using FodyTools;
 

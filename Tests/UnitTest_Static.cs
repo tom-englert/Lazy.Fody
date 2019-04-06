@@ -1,5 +1,3 @@
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-
 namespace Tests
 {
     using System;
@@ -9,37 +7,21 @@ namespace Tests
 
     using Xunit;
 
-    public class UnitTest_Static {
-        static int _getValueCalls;
-        static readonly Lazy<int> _lazy = new Lazy<int>(GetValue);
+    public class UnitTest_Static_1
+    {
+        private static int _getValueCalls;
+        private static readonly Lazy<int> _lazy = new Lazy<int>(GetValue);
 
-        static int GetValue() {
+        private static int GetValue()
+        {
             return Interlocked.Increment(ref _getValueCalls);
         }
 
-        public static int Lazy_System => _lazy.Value;
-
-        [Lazy] public static int Lazy_Fody_Static => GetValue();
-
-        [Lazy] public int Lazy_Fody_Instance => GetValue();
-    }
-
-    public class UnitTest_Static_1 {
-        static int _getValueCalls;
-        static readonly Lazy<int> _lazy = new Lazy<int>(GetValue);
-
-        static int GetValue() {
-            return Interlocked.Increment(ref _getValueCalls);
-        }
-
-        public static int Lazy_System => _lazy.Value;
-
-        [Lazy] public static int Lazy_Fody_Static => GetValue();
-
-        [Lazy] public int Lazy_Fody_Instance => GetValue();
+        private static int Lazy_System => _lazy.Value;
 
         [Fact]
-        public void IsLazyApplied_System() {
+        public void IsLazyApplied_System()
+        {
             Assert.Equal(0, _getValueCalls);
             Assert.Equal(1, Lazy_System);
             Assert.Equal(1, _getValueCalls);
@@ -51,22 +33,21 @@ namespace Tests
         }
     }
 
-    public class UnitTest_Static_2 {
-        static int _getValueCalls;
-        static readonly Lazy<int> _lazy = new Lazy<int>(GetValue);
-
-        static int GetValue() {
+    public class UnitTest_Static_2
+    {
+        private static int _getValueCalls;
+        
+        private static int GetValue()
+        {
             return Interlocked.Increment(ref _getValueCalls);
         }
 
-        public static int Lazy_System => _lazy.Value;
-
-        [Lazy] public static int Lazy_Fody_Static => GetValue();
-
-        [Lazy] public int Lazy_Fody_Instance => GetValue();
+        [Lazy]
+        private static int Lazy_Fody_Static => GetValue();
 
         [Fact]
-        public void IsLazyApplied_Fody() {
+        public void IsLazyApplied_Fody()
+        {
             Assert.Equal(0, _getValueCalls);
             Assert.Equal(1, Lazy_Fody_Static);
             Assert.Equal(1, _getValueCalls);
@@ -78,23 +59,24 @@ namespace Tests
         }
     }
 
-    public class UnitTest_Static_3 {
-        static int _getValueCalls;
-        static readonly Lazy<int> _lazy = new Lazy<int>(GetValue);
+    public class UnitTest_Static_3
+    {
+        private static int _getValueCalls;
 
-        static int GetValue() {
+        private static int GetValue()
+        {
             return Interlocked.Increment(ref _getValueCalls);
         }
 
-        public static int Lazy_System => _lazy.Value;
+        [Lazy]
+        private static int Lazy_Fody_Static => GetValue();
 
-        [Lazy] public static int Lazy_Fody_Static => GetValue();
-
-        [Lazy] public int Lazy_Fody_Instance => GetValue();
-    
+        [Lazy]
+        private int Lazy_Fody_Instance => GetValue();
 
         [Fact]
-        public void IsLazyFody_Instance_SameAs_Static() {
+        public void IsLazyFody_Instance_SameAs_Static()
+        {
             var lazy_Fody_Local = new Lazy<int>(GetValue);
 
             Assert.Equal(0, _getValueCalls);

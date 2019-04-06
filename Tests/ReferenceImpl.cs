@@ -3,7 +3,7 @@
     using System;
     using System.Threading;
 
-    class Reference
+    internal class Reference
     {
         public double Value => GetValue();
 
@@ -13,7 +13,7 @@
         }
     }
 
-    class ReferenceWeaved
+    internal class ReferenceWeaved
     {
         private Lazy<double> _lazy;
 
