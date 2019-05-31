@@ -16,7 +16,7 @@ namespace Tests
     {
         private int _getValueCalls;
 
-        private Lazy<int> _lazy;
+        private readonly Lazy<int> _lazy;
 
         public UnitTest()
         {
@@ -64,7 +64,7 @@ namespace Tests
     {
         private int _getValueCalls;
 
-        private Lazy<int> _lazy;
+        private readonly Lazy<int> _lazy;
 
         public Sample()
         {
