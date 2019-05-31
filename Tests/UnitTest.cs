@@ -74,7 +74,6 @@ namespace Tests
         public Sample(int someParam)
             : this()
         {
-
         }
 
         [Lazy]
@@ -95,7 +94,7 @@ namespace Tests
         private readonly Lazy<int> _lazy;
 
         public Sample2()
-            : base(3)
+            : base(SomeStaticMethod())
         {
         }
 
@@ -125,6 +124,11 @@ namespace Tests
         private int GetValue()
         {
             return Interlocked.Increment(ref _getValueCalls);
+        }
+
+        private static int SomeStaticMethod()
+        {
+            return 5;
         }
     }
 }
