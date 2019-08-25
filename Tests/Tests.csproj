@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;netcoreapp2.1;net40-client;net40;netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netcoreapp2.1;net40-client;net40;netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsUnitTestSupportedByFramework Condition="'$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'netcoreapp2.1'">true</IsUnitTestSupportedByFramework>
   </PropertyGroup>
@@ -15,8 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="$(IsUnitTestSupportedByFramework) == true">
@@ -31,6 +30,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lazy\Lazy.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WeaverFiles Include="$(SolutionDir)$(SolutionName)\bin\$(Configuration)\net472\$(SolutionName).dll" />
   </ItemGroup>
 
 </Project>
