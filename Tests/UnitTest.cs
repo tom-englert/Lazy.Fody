@@ -76,7 +76,7 @@ namespace Tests
         {
         }
 
-        [Lazy]
+        [Lazy(LazyThreadSafetyMode.ExecutionAndPublication)] 
         public int Test => GetValue();
 
         public int Test1 => _lazy.Value;

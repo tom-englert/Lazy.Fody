@@ -10,7 +10,7 @@
     {
         public override void Execute()
         {
-            // Debugger.Launch();
+            // System.Diagnostics.Debugger.Launch();
 
             ModuleDefinition.Process(this, new SystemReferences(this));
         }

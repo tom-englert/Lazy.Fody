@@ -173,7 +173,7 @@
                     Instruction.Create(OpCodes.Ldnull),
                     Instruction.Create(OpCodes.Ldftn, originalMethod),
                     Instruction.Create(OpCodes.Newobj, funcConstructor),
-                    Instruction.Create(OpCodes.Ldc_I4, (int)threadingMode),
+                    Instruction.Create(OpCodes.Ldc_I4, threadingMode),
                     Instruction.Create(OpCodes.Newobj, lazyConstructor),
                     Instruction.Create(OpCodes.Stsfld, lazyField));
             }
@@ -184,7 +184,7 @@
                     Instruction.Create(OpCodes.Ldarg_0),
                     Instruction.Create(OpCodes.Ldftn, originalMethod),
                     Instruction.Create(OpCodes.Newobj, funcConstructor),
-                    Instruction.Create(OpCodes.Ldc_I4, (int) threadingMode),
+                    Instruction.Create(OpCodes.Ldc_I4, threadingMode),
                     Instruction.Create(OpCodes.Newobj, lazyConstructor),
                     Instruction.Create(OpCodes.Stfld, lazyField)
                 });
@@ -193,9 +193,9 @@
             weavedMethods[originalMethod] = wrapperMethod;
         }
 
-        private static bool ConsumeLazyAttribute([NotNull] ICustomAttributeProvider attributeProvider, out LazyThreadSafetyMode mode)
+        private static bool ConsumeLazyAttribute([NotNull] ICustomAttributeProvider attributeProvider, out int mode)
         {
-            mode = default(LazyThreadSafetyMode);
+            mode = default(int);
 
             const string attributeName = "Lazy.LazyAttribute";
 
@@ -204,7 +204,7 @@
             if (attribute == null)
                 return false;
 
-            mode = attribute.GetValueTypeConstructorArgument<LazyThreadSafetyMode>() ?? default(LazyThreadSafetyMode);
+            mode = attribute.GetValueTypeConstructorArgument<int>() ?? default(int);
 
             attributeProvider.CustomAttributes.Remove(attribute);
 
