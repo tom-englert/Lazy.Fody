@@ -21,7 +21,7 @@
         /// See https://github.com/tom-englert/Lazy.Fody for details.<para/>
         /// </summary>
         /// <param name="mode">The threading mode passed to the constructor of <see cref="Lazy{T}"/>.</param>
-        public LazyAttribute(LazyThreadSafetyMode mode = default(LazyThreadSafetyMode))
+        public LazyAttribute(LazyThreadSafetyMode mode = default)
         {
             Mode = mode;
         }

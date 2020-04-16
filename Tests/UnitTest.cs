@@ -117,7 +117,7 @@ namespace Tests
         public double Test2 => 2.5;
 
         [Lazy]
-        public Func<Type> Test3 => () => default(Type);
+        public Func<Type> Test3 => () => default;
 
         public int Test1 => _lazy.Value;
 

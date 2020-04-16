@@ -4,8 +4,6 @@
 
     using FodyTools;
 
-    using JetBrains.Annotations;
-
     public class ModuleWeaver : AbstractModuleWeaver
     {
         public override void Execute()
@@ -15,8 +13,6 @@
             ModuleDefinition.Process(this, new SystemReferences(this));
         }
 
-        [ItemNotNull]
-        [NotNull]
         public override IEnumerable<string> GetAssembliesForScanning()
         {
             yield return "System.Threading";

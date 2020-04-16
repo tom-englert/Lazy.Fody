@@ -3,13 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
 
     using FodyTools;
 
     using global::Fody;
-
-    using JetBrains.Annotations;
 
     using Mono.Cecil;
     using Mono.Cecil.Cil;
@@ -17,7 +14,7 @@
 
     internal static class Processor
     {
-        internal static void Process([NotNull] this ModuleDefinition moduleDefinition, [NotNull] ILogger logger, [NotNull] SystemReferences coreReferences)
+        internal static void Process(this ModuleDefinition moduleDefinition, ILogger logger, SystemReferences coreReferences)
         {
             var allTypes = moduleDefinition.GetTypes();
 
@@ -40,7 +37,7 @@
             }
         }
 
-        private static void PostProcessClass([NotNull] TypeDefinition classDefinition, [NotNull] ILogger logger, [NotNull] IReadOnlyDictionary<MethodDefinition, MethodDefinition> weavedMethods, [NotNull] HashSet<MethodDefinition> injectedMethods)
+        private static void PostProcessClass(TypeDefinition classDefinition, ILogger logger, IReadOnlyDictionary<MethodDefinition, MethodDefinition> weavedMethods, HashSet<MethodDefinition> injectedMethods)
         {
             var allMethods = classDefinition.Methods
                 .Where(method => method.HasBody)
@@ -52,7 +49,7 @@
             }
         }
 
-        private static void PostProcessMethod([NotNull] MethodDefinition method, [NotNull] ILogger logger, [NotNull] IReadOnlyDictionary<MethodDefinition, MethodDefinition> weavedMethods, [NotNull] HashSet<MethodDefinition> injectedMethods)
+        private static void PostProcessMethod(MethodDefinition method, ILogger logger, IReadOnlyDictionary<MethodDefinition, MethodDefinition> weavedMethods, HashSet<MethodDefinition> injectedMethods)
         {
             if (injectedMethods == null)
                 throw new ArgumentNullException(nameof(injectedMethods));
@@ -80,7 +77,7 @@
             }
         }
 
-        private static void ProcessClass([NotNull] TypeDefinition classDefinition, [NotNull] SystemReferences systemReferences, [NotNull] ILogger logger, [NotNull] IDictionary<MethodDefinition, MethodDefinition> weavedMethods)
+        private static void ProcessClass(TypeDefinition classDefinition, SystemReferences systemReferences, ILogger logger, IDictionary<MethodDefinition, MethodDefinition> weavedMethods)
         {
             foreach (var property in classDefinition.Properties)
             {
@@ -88,7 +85,7 @@
             }
         }
 
-        private static void ProcessProperty([NotNull] PropertyDefinition property, [NotNull] SystemReferences systemReferences, [NotNull] ILogger logger, [NotNull] IDictionary<MethodDefinition, MethodDefinition> weavedMethods)
+        private static void ProcessProperty(PropertyDefinition property, SystemReferences systemReferences, ILogger logger, IDictionary<MethodDefinition, MethodDefinition> weavedMethods)
         {
             if (!ConsumeLazyAttribute(property, out var threadingMode))
                 return;
@@ -193,9 +190,9 @@
             weavedMethods[originalMethod] = wrapperMethod;
         }
 
-        private static bool ConsumeLazyAttribute([NotNull] ICustomAttributeProvider attributeProvider, out int mode)
+        private static bool ConsumeLazyAttribute(ICustomAttributeProvider attributeProvider, out int mode)
         {
-            mode = default(int);
+            mode = default;
 
             const string attributeName = "Lazy.LazyAttribute";
 
@@ -204,7 +201,7 @@
             if (attribute == null)
                 return false;
 
-            mode = attribute.GetValueTypeConstructorArgument<int>() ?? default(int);
+            mode = attribute.GetValueTypeConstructorArgument<int>() ?? default;
 
             attributeProvider.CustomAttributes.Remove(attribute);
 

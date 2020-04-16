@@ -7,8 +7,6 @@ namespace Lazy.Fody
 
     using FodyTools;
 
-    using JetBrains.Annotations;
-
     using Mono.Cecil;
 
     internal class SystemReferences
@@ -23,10 +21,12 @@ namespace Lazy.Fody
 
         public MethodReference LazyValueGetterReference { get; }
 
-        public SystemReferences([NotNull] ITypeSystem typeSystem)
+        public SystemReferences(ITypeSystem typeSystem)
         {
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             LazyTypeReference = typeSystem.ImportType<Lazy<T>>();
-            LazyConstructorReference = typeSystem.ImportMethod(() => new Lazy<T>(() => default(T), default(LazyThreadSafetyMode)));
+            LazyConstructorReference = typeSystem.ImportMethod(() => new Lazy<T>(() => default, default(LazyThreadSafetyMode)));
             LazyValueGetterReference = typeSystem.ImportPropertyGet(() => default(Lazy<T>).Value);
             
             FuncTypeReference = typeSystem.ImportType<Func<T>>();
