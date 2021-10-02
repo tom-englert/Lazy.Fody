@@ -131,4 +131,10 @@ namespace Tests
             return 5;
         }
     }
+
+    class Test
+    {
+        [Lazy]
+        public Test Property => new Test();
+    }
 }

@@ -2,10 +2,15 @@
 <Project>
 
   <PropertyGroup>
-    <Copyright>Copyright © tom-englert.de 2019-2020. Distributed under the MIT License.</Copyright>
+    <Copyright>Copyright © tom-englert.de 2019-2021. Distributed under the MIT License.</Copyright>
     <Product>Lazy.Fody</Product>
     <Version>1.9.0</Version>
     <Description>Automates the plumbing around System.Lazy.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <Import Project="Common.props" />
