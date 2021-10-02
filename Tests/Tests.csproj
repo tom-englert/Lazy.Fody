@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lazy.Fody.Analyzer\Lazy.Fody.Analyzer.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
     <ProjectReference Include="..\Lazy\Lazy.csproj" />
   </ItemGroup>
 

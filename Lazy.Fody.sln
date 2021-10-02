@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31605.320
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3A7EA45-8C4B-40B0-8266-C2DE52414BCF}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,14 +13,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.Fody", "Lazy.Fody\Lazy.Fody.csproj", "{76DFCCE3-BB80-473D-8156-07CC7500CEF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1FEB99EE-2462-499F-A341-DCF1F6EC4A37} = {1FEB99EE-2462-499F-A341-DCF1F6EC4A37}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy", "Lazy\Lazy.csproj", "{98288BBA-5297-4A86-8277-B50DC407F16E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{D158B513-ACCD-453C-8803-D6941C60073E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lazy.Fody.Analyzer", "Lazy.Fody.Analyzer\Lazy.Fody.Analyzer.csproj", "{1FEB99EE-2462-499F-A341-DCF1F6EC4A37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.Fody.Analyzer", "Lazy.Fody.Analyzer\Lazy.Fody.Analyzer.csproj", "{1FEB99EE-2462-499F-A341-DCF1F6EC4A37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lazy.Fody.Analyzer.Tests", "Lazy.Fody.Analyzer.Tests\Lazy.Fody.Analyzer.Tests.csproj", "{C02FF131-07C9-4957-829E-CF6CF5516D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.Fody.Analyzer.Tests", "Lazy.Fody.Analyzer.Tests\Lazy.Fody.Analyzer.Tests.csproj", "{C02FF131-07C9-4957-829E-CF6CF5516D0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roslyn-SDK", "Roslyn-SDK", "{46D32A8C-AD1C-42AB-99A8-3753D34957FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit", "roslyn-sdk\src\Microsoft.CodeAnalysis.Testing\Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit\Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit.csproj", "{61B7045D-AC66-4BCA-9CEA-7E7301510877}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.CodeAnalysis.Analyzer.Testing", "roslyn-sdk\src\Microsoft.CodeAnalysis.Testing\Microsoft.CodeAnalysis.Analyzer.Testing\Microsoft.CodeAnalysis.Analyzer.Testing.csproj", "{65965187-857F-42DA-B7CD-7BE3A7F5D3B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.CodeAnalysis.CSharp.Analyzer.Testing", "roslyn-sdk\src\Microsoft.CodeAnalysis.Testing\Microsoft.CodeAnalysis.CSharp.Analyzer.Testing\Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.csproj", "{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.CodeAnalysis.Testing.Verifiers.XUnit", "roslyn-sdk\src\Microsoft.CodeAnalysis.Testing\Microsoft.CodeAnalysis.Testing.Verifiers.XUnit\Microsoft.CodeAnalysis.Testing.Verifiers.XUnit.csproj", "{9C119128-6F11-48D6-BDDD-DDD7606A4605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,9 +61,31 @@ Global
 		{C02FF131-07C9-4957-829E-CF6CF5516D0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C02FF131-07C9-4957-829E-CF6CF5516D0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C02FF131-07C9-4957-829E-CF6CF5516D0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B7045D-AC66-4BCA-9CEA-7E7301510877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B7045D-AC66-4BCA-9CEA-7E7301510877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B7045D-AC66-4BCA-9CEA-7E7301510877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B7045D-AC66-4BCA-9CEA-7E7301510877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65965187-857F-42DA-B7CD-7BE3A7F5D3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65965187-857F-42DA-B7CD-7BE3A7F5D3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65965187-857F-42DA-B7CD-7BE3A7F5D3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65965187-857F-42DA-B7CD-7BE3A7F5D3B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C119128-6F11-48D6-BDDD-DDD7606A4605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C119128-6F11-48D6-BDDD-DDD7606A4605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C119128-6F11-48D6-BDDD-DDD7606A4605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C119128-6F11-48D6-BDDD-DDD7606A4605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61B7045D-AC66-4BCA-9CEA-7E7301510877} = {46D32A8C-AD1C-42AB-99A8-3753D34957FF}
+		{65965187-857F-42DA-B7CD-7BE3A7F5D3B2} = {46D32A8C-AD1C-42AB-99A8-3753D34957FF}
+		{4F8E76A5-2C0E-48C3-9DD4-D933F782EDA9} = {46D32A8C-AD1C-42AB-99A8-3753D34957FF}
+		{9C119128-6F11-48D6-BDDD-DDD7606A4605} = {46D32A8C-AD1C-42AB-99A8-3753D34957FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD61263F-42F2-4052-A140-7C74490578E5}

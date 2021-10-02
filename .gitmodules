@@ -2,3 +2,7 @@
 	path = FodyTools
 	url = https://github.com/tom-englert/FodyTools.git
 	branch = master
+[submodule "roslyn-sdk"]
+	path = roslyn-sdk
+	url = https://github.com/tom-englert/roslyn-sdk.git
+	branch = main

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
@@ -17,12 +15,17 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
     {
         private class Test : CSharpAnalyzerTest<TAnalyzer, XUnitVerifier>
         {
-            private readonly bool _ignoreSuppressedDiagnostics;
-            private readonly TSystemAnalyzer _systemAnalyzer = new TSystemAnalyzer();
+            private readonly TSystemAnalyzer _systemAnalyzer = new();
 
-            public Test(string testCode, bool ignoreSuppressedDiagnostics, IDictionary<string, ReportDiagnostic> diagnosticOptions = null)
+            public Test(string testCode, IEnumerable<DiagnosticResult> expectedDiagnostics, IDictionary<string, ReportDiagnostic>? diagnosticOptions = null)
             {
-                _ignoreSuppressedDiagnostics = ignoreSuppressedDiagnostics;
+                DiagnosticVerifier = (diagnostic, result, verifier) =>
+                {
+                    var shouldBeSuppressed = result.IsSuppressed.GetValueOrDefault();
+                    verifier.Equal(shouldBeSuppressed, diagnostic.IsSuppressed, $"Diagnostic {result} => suppression state should be {shouldBeSuppressed}");
+                };
+
+                ExpectedDiagnostics.AddRange(expectedDiagnostics);
                 TestCode = testCode;
                 TestBehaviors = TestBehaviors.SkipGeneratedCodeCheck;
                 diagnosticOptions ??= _systemAnalyzer.SupportedDiagnostics
@@ -36,8 +39,7 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
                     var project = solution
                         .GetProject(projectId);
 
-                    var compilationOptions = (CSharpCompilationOptions?)project
-                        .CompilationOptions;
+                    var compilationOptions = (CSharpCompilationOptions)project!.CompilationOptions!;
 
                     compilationOptions = compilationOptions
                         .WithGeneralDiagnosticOption(ReportDiagnostic.Error)
@@ -48,14 +50,6 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
 
                     return solution;
                 });
-            }
-
-            protected override bool IsCompilerDiagnosticIncluded(Diagnostic diagnostic, CompilerDiagnostics compilerDiagnostics)
-            {
-                if (_ignoreSuppressedDiagnostics && diagnostic.IsSuppressed)
-                    return false;
-
-                return base.IsCompilerDiagnosticIncluded(diagnostic, compilerDiagnostics);
             }
 
             protected override IEnumerable<DiagnosticAnalyzer> GetDiagnosticAnalyzers()

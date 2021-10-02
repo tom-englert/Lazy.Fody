@@ -12,4 +12,13 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzerToOutput</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+  <Target Name="_AddAnalyzerToOutput">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(SolutionDir)Lazy.Fody.Analyzer\bin\$(Configuration)\netstandard2.0\Lazy.Fody.Analyzer.dll" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
+
 </Project>

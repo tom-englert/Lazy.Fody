@@ -14,9 +14,11 @@ namespace Lazy.Fody.Analyzer
         private static readonly string[] SupportedSuppressionIds = { "CA1822" };
 
         private static SuppressionDescriptor ToSuppressionDescriptor(string id) =>
-            new("Lazy_" + id, id, $"Suppress {id}.");
+            new("Lazy_" + id, id, $"Suppress {id} when the property has the Lazy attribute.");
 
         public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } = SupportedSuppressionIds.Select(ToSuppressionDescriptor).ToImmutableArray();
+
+        private const string LazyAttributeFullName = "Lazy.LazyAttribute";
 
         public override void ReportSuppressions(SuppressionAnalysisContext context)
         {
@@ -36,15 +38,25 @@ namespace Lazy.Fody.Analyzer
                     var sourceSpan = location.SourceSpan;
                     var elementNode = root.FindNode(sourceSpan);
 
-                    if (elementNode is PropertyDeclarationSyntax propertyDeclaration)
+                    if (elementNode is not PropertyDeclarationSyntax propertyDeclaration) 
+                        continue;
+                    
+                    var attribute = propertyDeclaration.AttributeLists
+                        .SelectMany(list => list.Attributes)
+                        .FirstOrDefault(attr => attr.Name.ToString().Contains("Lazy"));
+
+                    if (attribute == null) 
+                        continue;
+
+                    var model = context.GetSemanticModel(sourceTree);
+                    var typeInfo = model.GetTypeInfo(attribute, cancellationToken);
+
+                    if (typeInfo.Type?.ToString() == LazyAttributeFullName)
                     {
-                        if (propertyDeclaration.AttributeLists.SelectMany(list => list.Attributes).Any(attr => attr.Name.ToString() == "Lazy"))
-                        {
-                            context.ReportSuppression(Suppression.Create(SupportedSuppressions[0], diagnostic));
-                        }
+                        context.ReportSuppression(Suppression.Create(SupportedSuppressions[0], diagnostic));
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // could not analyze, so just do not suppress anything.
                 }
