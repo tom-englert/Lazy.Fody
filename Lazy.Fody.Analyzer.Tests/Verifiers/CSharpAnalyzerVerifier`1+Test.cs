@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Testing.Verifiers;
 namespace Lazy.Fody.Analyzer.Tests.Verifiers
 {
     public static partial class CSharpAnalyzerVerifier<TAnalyzer, TSystemAnalyzer>
-        where TAnalyzer : DiagnosticAnalyzer, new()
+        where TAnalyzer : DiagnosticSuppressor, new()
         where TSystemAnalyzer : DiagnosticAnalyzer, new()
     {
         private class Test : CSharpAnalyzerTest<TAnalyzer, XUnitVerifier>
@@ -19,12 +19,6 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
 
             public Test(string testCode, IEnumerable<DiagnosticResult> expectedDiagnostics, IDictionary<string, ReportDiagnostic>? diagnosticOptions = null)
             {
-                DiagnosticVerifier = (diagnostic, result, verifier) =>
-                {
-                    var shouldBeSuppressed = result.IsSuppressed.GetValueOrDefault();
-                    verifier.Equal(shouldBeSuppressed, diagnostic.IsSuppressed, $"Diagnostic {result} => suppression state should be {shouldBeSuppressed}");
-                };
-
                 ExpectedDiagnostics.AddRange(expectedDiagnostics);
                 TestCode = testCode;
                 TestBehaviors = TestBehaviors.SkipGeneratedCodeCheck;

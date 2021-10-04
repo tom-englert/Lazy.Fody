@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Testing;
 namespace Lazy.Fody.Analyzer.Tests.Verifiers
 {
     public static partial class CSharpAnalyzerVerifier<TAnalyzer, TSystemAnalyzer>
-        where TAnalyzer : DiagnosticAnalyzer, new()
+        where TAnalyzer : DiagnosticSuppressor, new()
         where TSystemAnalyzer : DiagnosticAnalyzer, new()
     {
         public static async Task VerifyAnalyzerAsync(string source, ICollection<DiagnosticResult>? diagnostics = null, IDictionary<string, ReportDiagnostic>? diagnosticOptions = null)

@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.Testing;
@@ -12,6 +14,8 @@ namespace Lazy.Fody.Analyzer.Tests
 {
     public class SuppressorTests
     {
+        private static readonly DiagnosticResult CA1822 = DiagnosticResult.CompilerError("CA1822").WithIsSuppressed(false);
+
         [Fact]
         public async Task Test1()
         {
@@ -26,7 +30,7 @@ class Test
 
             var results = new[]
             {
-                DiagnosticResult.CompilerError("CA1822").WithLocation(0).WithIsSuppressed(true)
+               CA1822.WithLocation(0).WithIsSuppressed(true)
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, results);
@@ -47,8 +51,8 @@ class Test
 
             var expected = new[]
             {
-                DiagnosticResult.CompilerError("CA1822").WithLocation(0).WithIsSuppressed(true),
-                DiagnosticResult.CompilerError("CA1822").WithLocation(1).WithIsSuppressed(false)
+                CA1822.WithLocation(0).WithIsSuppressed(true),
+                CA1822.WithLocation(1)
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
@@ -69,8 +73,8 @@ class Test
 
             var expected = new[]
             {
-                DiagnosticResult.CompilerError("CA1822").WithLocation(0).WithIsSuppressed(false),
-                DiagnosticResult.CompilerError("CA1822").WithLocation(1).WithIsSuppressed(true)
+                CA1822.WithLocation(0),
+                CA1822.WithLocation(1).WithIsSuppressed(true)
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
@@ -88,11 +92,10 @@ class Test
 
             var expected = new[]
             {
-                DiagnosticResult.CompilerError("CA1822").WithLocation(0).WithIsSuppressed(true)
+                CA1822.WithLocation(0).WithIsSuppressed(true)
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
-
     }
 }
