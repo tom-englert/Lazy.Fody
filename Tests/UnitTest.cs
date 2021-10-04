@@ -2,6 +2,7 @@
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable NotNullMemberIsNotInitialized
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+#nullable disable
 
 namespace Tests
 {
