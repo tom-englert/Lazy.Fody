@@ -50,6 +50,18 @@ namespace Tests
             Assert.Equal(1, Test);
         }
 
+        [Fact]
+        public void WorksWithGenrics()
+        {
+            var target = new SampleGeneric<double>();
+            // var target = new Sample();
+
+            Assert.Equal(1, target.Test);
+            Assert.Equal(2, target.Test1);
+            Assert.Equal(1, target.Test);
+            Assert.Equal(2, target.Test1);
+        }
+
         [Lazy]
         public int Test => GetValue();
 
@@ -130,6 +142,28 @@ namespace Tests
         private static int SomeStaticMethod()
         {
             return 5;
+        }
+    }
+
+    public class SampleGeneric<T>
+    {
+        private int _getValueCalls;
+
+        private readonly Lazy<int> _lazy;
+
+        public SampleGeneric()
+        {
+            _lazy = new Lazy<int>(GetValue);
+        }
+
+        [Lazy(LazyThreadSafetyMode.ExecutionAndPublication)]
+        public int Test => GetValue();
+
+        public int Test1 => _lazy.Value;
+
+        private int GetValue()
+        {
+            return Interlocked.Increment(ref _getValueCalls);
         }
     }
 

@@ -133,10 +133,24 @@
 
             var wrapperMethodInstructions = wrapperMethod.Body.Instructions;
 
+            // -- rename old method
+            originalMethod.IsSpecialName = false;
+            originalMethod.Name = lazyMethodName;
+
+            MethodReference originalMethodReference = originalMethod;
+            FieldReference lazyFieldReference = lazyField;
+
+            if (classDefinition.HasGenericParameters)
+            {
+                var classReference = classDefinition.MakeGenericInstanceType(classDefinition.GenericParameters.OfType<TypeReference>().ToArray());
+                originalMethodReference = originalMethod.OnGenericType(classReference);
+                lazyFieldReference = new FieldReference(lazyField.Name, lazyField.FieldType, classReference);
+            }
+
             if (isStatic)
             {
                 wrapperMethodInstructions.AddRange(
-                    Instruction.Create(OpCodes.Ldsfld, lazyField),
+                    Instruction.Create(OpCodes.Ldsfld, lazyFieldReference),
                     Instruction.Create(OpCodes.Call, lazyValueGetter),
                     Instruction.Create(OpCodes.Ret));
 
@@ -145,16 +159,12 @@
             {
                 wrapperMethodInstructions.AddRange(
                     Instruction.Create(OpCodes.Ldarg_0),
-                    Instruction.Create(OpCodes.Ldfld, lazyField),
+                    Instruction.Create(OpCodes.Ldfld, lazyFieldReference),
                     Instruction.Create(OpCodes.Callvirt, lazyValueGetter),
                     Instruction.Create(OpCodes.Ret)
                 );
             }
 
-
-            // -- rename old method
-            originalMethod.IsSpecialName = false;
-            originalMethod.Name = lazyMethodName;
 
             // -- add new wrapper method
             property.GetMethod = wrapperMethod;
@@ -168,22 +178,22 @@
             {
                 classDefinition.InsertIntoStaticConstructor(
                     Instruction.Create(OpCodes.Ldnull),
-                    Instruction.Create(OpCodes.Ldftn, originalMethod),
+                    Instruction.Create(OpCodes.Ldftn, originalMethodReference),
                     Instruction.Create(OpCodes.Newobj, funcConstructor),
                     Instruction.Create(OpCodes.Ldc_I4, threadingMode),
                     Instruction.Create(OpCodes.Newobj, lazyConstructor),
-                    Instruction.Create(OpCodes.Stsfld, lazyField));
+                    Instruction.Create(OpCodes.Stsfld, lazyFieldReference));
             }
             else
             {
                 classDefinition.InsertIntoConstructors(() => new[] {
                     Instruction.Create(OpCodes.Ldarg_0),
                     Instruction.Create(OpCodes.Ldarg_0),
-                    Instruction.Create(OpCodes.Ldftn, originalMethod),
+                    Instruction.Create(OpCodes.Ldftn, originalMethodReference),
                     Instruction.Create(OpCodes.Newobj, funcConstructor),
                     Instruction.Create(OpCodes.Ldc_I4, threadingMode),
                     Instruction.Create(OpCodes.Newobj, lazyConstructor),
-                    Instruction.Create(OpCodes.Stfld, lazyField)
+                    Instruction.Create(OpCodes.Stfld, lazyFieldReference)
                 });
             }
 
