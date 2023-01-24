@@ -23,30 +23,26 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
             {
                 ExpectedDiagnostics.AddRange(expectedDiagnostics);
                 TestCode = testCode;
-                TestBehaviors = TestBehaviors.SkipGeneratedCodeCheck;
+                TestBehaviors = TestBehaviors.SkipGeneratedCodeCheck | TestBehaviors.SkipSuppressionCheck;
+                ReportSuppressedDiagnostics = true;
+                SolutionTransforms.Add((solution, projectId) => solution.AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(LazyAttribute).Assembly.Location)));
+            }
 
+            public bool ReportSuppressedDiagnostics { get; set; }
+
+            protected override CompilationOptions CreateCompilationOptions()
+            {
+                var compilationOptions = (CSharpCompilationOptions)base.CreateCompilationOptions();
                 var diagnosticOptions = _systemAnalyzer.SupportedDiagnostics
                     .Select(item => item.Id)
                     .ToDictionary(item => item, _ => ReportDiagnostic.Error);
 
-                SolutionTransforms.Add((solution, projectId) =>
-                {
-                    solution = solution.AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(LazyAttribute).Assembly.Location));
+                compilationOptions = compilationOptions
+                    .WithGeneralDiagnosticOption(ReportDiagnostic.Error)
+                    .WithSpecificDiagnosticOptions(diagnosticOptions)
+                    .WithNullableContextOptions(NullableContextOptions.Enable);
 
-                    var project = solution
-                        .GetProject(projectId);
-
-                    var compilationOptions = (CSharpCompilationOptions)project!.CompilationOptions!;
-
-                    compilationOptions = compilationOptions
-                        .WithGeneralDiagnosticOption(ReportDiagnostic.Error)
-                        .WithSpecificDiagnosticOptions(diagnosticOptions)
-                        .WithNullableContextOptions(NullableContextOptions.Enable);
-
-                    solution = solution.WithProjectCompilationOptions(projectId, compilationOptions);
-
-                    return solution;
-                });
+                return compilationOptions;
             }
 
             protected override ParseOptions CreateParseOptions()
@@ -56,7 +52,7 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
 
             protected override CompilationWithAnalyzers CreateCompilationWithAnalyzers(Compilation compilation, ImmutableArray<DiagnosticAnalyzer> analyzers, AnalyzerOptions options, CancellationToken cancellationToken)
             {
-                return compilation.WithAnalyzers(analyzers, new CompilationWithAnalyzersOptions(options, null, true, false, true));
+                return compilation.WithAnalyzers(analyzers, new CompilationWithAnalyzersOptions(options, null, true, false, ReportSuppressedDiagnostics));
             }
 
             protected override IEnumerable<DiagnosticAnalyzer> GetDiagnosticAnalyzers()
