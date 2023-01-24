@@ -24,11 +24,11 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
                 ExpectedDiagnostics.AddRange(expectedDiagnostics);
                 TestCode = testCode;
                 TestBehaviors = TestBehaviors.SkipGeneratedCodeCheck | TestBehaviors.SkipSuppressionCheck;
-                ReportSuppressedDiagnostics = true;
-                SolutionTransforms.Add((solution, projectId) => solution.AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(LazyAttribute).Assembly.Location)));
             }
 
             public bool ReportSuppressedDiagnostics { get; set; }
+
+            public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.CSharp11;
 
             protected override CompilationOptions CreateCompilationOptions()
             {
@@ -47,7 +47,7 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
 
             protected override ParseOptions CreateParseOptions()
             {
-                return new CSharpParseOptions(LanguageVersion.CSharp11, DocumentationMode.Diagnose);
+                return new CSharpParseOptions(LanguageVersion, DocumentationMode.Diagnose);
             }
 
             protected override CompilationWithAnalyzers CreateCompilationWithAnalyzers(Compilation compilation, ImmutableArray<DiagnosticAnalyzer> analyzers, AnalyzerOptions options, CancellationToken cancellationToken)

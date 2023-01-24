@@ -47,7 +47,7 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
                     .Distinct()
                     .Select(assembly => MetadataReference.CreateFromFile(assembly.Location));
 
-                solution = solution.WithProjectMetadataReferences(project.Id, project.MetadataReferences.Concat(localMetadataReferences));
+                solution = solution.AddMetadataReferences(project.Id, localMetadataReferences);
 
                 return solution;
             });
