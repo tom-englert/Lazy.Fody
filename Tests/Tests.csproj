@@ -1,33 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net472;netcoreapp2.0;net40-client;net40;netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
     <TargetFrameworks>net472</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsUnitTestSupportedByFramework Condition="'$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'netcoreapp2.0'">true</IsUnitTestSupportedByFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="UnitTest_Static_Simple.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Fody" Version="6.1.1" PrivateAssets="all" />
   </ItemGroup>
-
   <ItemGroup Condition="$(IsUnitTestSupportedByFramework) == true">
     <Compile Remove="XunitStubs.cs" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" PrivateAssets="all" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Lazy.Fody.Analyzer\Lazy.Fody.Analyzer.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -35,9 +24,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Lazy\Lazy.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <WeaverFiles Include="$(SolutionDir)$(SolutionName)\bin\$(Configuration)\net472\$(SolutionName).dll" />
   </ItemGroup>
-
 </Project>

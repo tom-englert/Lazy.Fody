@@ -13,11 +13,11 @@ namespace Lazy.Fody.Analyzer.Tests.Verifiers
         where TAnalyzer : DiagnosticSuppressor, new()
         where TSystemAnalyzer : DiagnosticAnalyzer, new()
     {
-        public static async Task VerifyAnalyzerAsync(string source, ICollection<DiagnosticResult>? diagnostics = null, IDictionary<string, ReportDiagnostic>? diagnosticOptions = null)
+        public static async Task VerifyAnalyzerAsync(string source, ICollection<DiagnosticResult>? diagnostics = null)
         {
             diagnostics ??= Array.Empty<DiagnosticResult>();
 
-            var test1 = new Test(source, diagnostics, diagnosticOptions);
+            var test1 = new Test(source, diagnostics);
 
             await test1.RunAsync(CancellationToken.None);
         }
